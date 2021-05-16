@@ -1,57 +1,57 @@
-import { InteractionContent } from './commonInteractions'
+import {InteractionContent} from './commonInteractions'
 
 export declare type methods =
-  'GET'
-  | 'POST'
-  | 'PUT'
-  | 'PATCH'
-  | 'DELETE'
-  | 'HEAD'
-  | 'OPTIONS'
-  | 'COPY'
-  | 'LOCK'
-  | 'MKCOL'
-  | 'MOVE'
-  | 'PROPFIND'
-  | 'PROPPATCH'
-  | 'UNLOCK'
-  | 'REPORT';
+    'GET'
+    | 'POST'
+    | 'PUT'
+    | 'PATCH'
+    | 'DELETE'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'COPY'
+    | 'LOCK'
+    | 'MKCOL'
+    | 'MOVE'
+    | 'PROPFIND'
+    | 'PROPPATCH'
+    | 'UNLOCK'
+    | 'REPORT';
 
 export declare enum HTTPMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-  HEAD = 'HEAD',
-  OPTIONS = 'OPTIONS',
-  COPY = 'COPY',
-  LOCK = 'LOCK',
-  MKCOL = 'MKCOL',
-  MOVE = 'MOVE',
-  PROPFIND = 'PROPFIND',
-  PROPPATCH = 'PROPPATCH',
-  UNLOCK = 'UNLOCK',
-  REPORT = 'REPORT'
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    PATCH = 'PATCH',
+    DELETE = 'DELETE',
+    HEAD = 'HEAD',
+    OPTIONS = 'OPTIONS',
+    COPY = 'COPY',
+    LOCK = 'LOCK',
+    MKCOL = 'MKCOL',
+    MOVE = 'MOVE',
+    PROPFIND = 'PROPFIND',
+    PROPPATCH = 'PROPPATCH',
+    UNLOCK = 'UNLOCK',
+    REPORT = 'REPORT'
 }
 
-export type RequestOptions = {
-  method: HTTPMethod | methods;
-  path: string | MatcherResult;
-  query?: Query;
-  headers?: {
-    [name: string]: string | MatcherResult;
-  };
-  body?: any;
+export type RequestOptions<TBody> = {
+    method: HTTPMethod | methods;
+    path: string | MatcherResult;
+    query?: Query;
+    headers?: {
+        [name: string]: string | MatcherResult;
+    };
+    body: TBody;
 }
 
 export type MatcherResult = {
-  json_class: string,
-  getValue(): any
+    json_class: string,
+    getValue(): any
 }
 
 export interface QueryObject {
-  [name: string]: string | MatcherResult | string[];
+    [name: string]: string | MatcherResult | string[];
 }
 
 export declare type Query = string | QueryObject;
