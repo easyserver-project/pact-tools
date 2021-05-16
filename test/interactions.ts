@@ -6,7 +6,7 @@ export type TestRequestBody = {
 }
 
 export const createInteractions = (like: LikeFunc = v => v) => {
-    const emptyInteraction: InteractionContent<TestRequestBody, undefined> = {
+    const emptyInteraction: InteractionContent<TestRequestBody> = {
         given: {
             undefined: {
                 status: 200,

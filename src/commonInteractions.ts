@@ -1,6 +1,7 @@
 import {MatcherResult, RequestOptions} from './interactionTypes'
 
-export type InteractionContent<TBody, TRes> = {
+
+export interface InteractionContent<TBody = void, TRes = void> {
     given: {
         [index: string]: {
             status: number | MatcherResult;
