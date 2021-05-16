@@ -30,6 +30,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
         name: like('NameHere'),
       },
       pathParams: undefined,
+      query: undefined,
     },
   }
 
@@ -55,6 +56,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
       },
       body: undefined,
       pathParams: undefined,
+      query: undefined,
     },
   }
 
@@ -85,7 +87,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
   const pathParamsInteraction: InteractionContent<
     undefined,
     { responseId: string },
-    {},
+    undefined,
     { lastName: string; firstName: string }
   > = {
     given: {
@@ -99,6 +101,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
       method: 'GET',
       path: '/api/:firstName/:lastName',
       body: undefined,
+      query: undefined,
       pathParams: { firstName: 'Person', lastName: 'Personsson' },
     },
   }

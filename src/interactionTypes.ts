@@ -43,7 +43,7 @@ export type RequestOptions<
   method: HTTPMethod | methods
   path: string
   pathParams: TParams
-  query?: TQuery
+  query: TQuery
   headers?: {
     [name: string]: string | MatcherResult
   }
