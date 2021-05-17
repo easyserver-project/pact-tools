@@ -38,7 +38,8 @@ export declare enum HTTPMethod {
 export type RequestOptions<
   TBody,
   TQuery extends QueryObject | undefined,
-  TParams extends QueryObject | undefined
+  TParams extends QueryObject | undefined,
+  THeaders extends QueryObject | undefined
 > = {
   method: HTTPMethod | methods
   path: string
@@ -47,6 +48,7 @@ export type RequestOptions<
   headers?: {
     [name: string]: string | MatcherResult
   }
+  headerParams: THeaders
   body: TBody
 }
 
@@ -63,5 +65,5 @@ export declare type Query = QueryObject
 
 export type LikeFunc = <T>(v: T) => T
 export type CreateInteractions = (like: LikeFunc) => {
-  [index: string]: InteractionContent<any, any, any, any>
+  [index: string]: InteractionContent<any, any, any, any, any>
 }

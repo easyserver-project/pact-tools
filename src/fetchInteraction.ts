@@ -13,22 +13,24 @@ export interface VoidResult {
 export type FetchInteractionOptions<
   TBody,
   TQuery extends QueryObject,
-  TParams extends QueryObject
+  TParams extends QueryObject,
+  THeaders extends QueryObject
 > = {
   body: TBody
   query: TQuery
   params: TParams
-  headers?: { [index: string]: string }
+  headers: THeaders
 }
 
 export async function fetchInteraction<
   TBody,
   TRes,
   TQuery extends QueryObject,
-  TParams extends QueryObject
+  TParams extends QueryObject,
+  THeaders extends QueryObject
 >(
-  interaction: InteractionContent<TBody, TRes, TQuery, TParams>,
-  options: FetchInteractionOptions<TBody, TQuery, TParams>
+  interaction: InteractionContent<TBody, TRes, TQuery, TParams, THeaders>,
+  options: FetchInteractionOptions<TBody, TQuery, TParams, THeaders>
 ): Promise<Result<TRes>> {
   let headers = interaction.withRequest.headers
     ? (Object.keys(interaction.withRequest.headers!) || []).reduce(
@@ -43,7 +45,11 @@ export async function fetchInteraction<
         {} as any
       )
     : {}
-  headers = { ...headers, ...options.headers }
+  if (interaction.withRequest.headerParams) {
+    for (const key of Object.keys(interaction.withRequest.headerParams)) {
+      headers[key] = options.headers[key]
+    }
+  }
   let url = interaction.withRequest.path.toString()
 
   // Replace params in url

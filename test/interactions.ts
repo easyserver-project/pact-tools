@@ -4,9 +4,10 @@ import { InteractionContent } from '../src/commonInteractions'
 export const createInteractions = (like: LikeFunc = (v) => v) => {
   const emptyInteraction: InteractionContent<
     { name: string },
-    undefined,
-    undefined,
-    undefined
+    void,
+    {},
+    {},
+    {}
   > = {
     given: {
       undefined: {
@@ -29,16 +30,18 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
       body: {
         name: like('NameHere'),
       },
-      pathParams: undefined,
-      query: undefined,
+      pathParams: {},
+      query: {},
+      headerParams: {},
     },
   }
 
   const responseInteraction: InteractionContent<
-    undefined,
+    void,
     { name: string },
-    undefined,
-    undefined
+    {},
+    {},
+    {}
   > = {
     given: {
       success: {
@@ -55,16 +58,18 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
         'Content-Type': 'application/json',
       },
       body: undefined,
-      pathParams: undefined,
-      query: undefined,
+      pathParams: {},
+      query: {},
+      headerParams: {},
     },
   }
 
   const queryInteraction: InteractionContent<
-    undefined,
+    void,
     { responseId: string },
     { id: string },
-    undefined
+    {},
+    {}
   > = {
     given: {
       success: {
@@ -76,19 +81,21 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     withRequest: {
       method: 'POST',
       path: '/api/query',
-      pathParams: undefined,
+      pathParams: {},
       query: {
         id: like('something'),
       },
       body: undefined,
+      headerParams: {},
     },
   }
 
   const pathParamsInteraction: InteractionContent<
-    undefined,
+    void,
     { responseId: string },
-    undefined,
-    { lastName: string; firstName: string }
+    {},
+    { lastName: string; firstName: string },
+    {}
   > = {
     given: {
       success: {
@@ -101,8 +108,33 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
       method: 'GET',
       path: '/api/:firstName/:lastName',
       body: undefined,
-      query: undefined,
+      query: {},
+      headerParams: {},
       pathParams: { firstName: 'Person', lastName: 'Personsson' },
+    },
+  }
+
+  const headerParamsInteraction: InteractionContent<
+    void,
+    void,
+    {},
+    {},
+    { Authorization: string }
+  > = {
+    given: {
+      success: {
+        status: 200,
+        body: undefined,
+      },
+    },
+    uponReceiving: 'header params',
+    withRequest: {
+      method: 'GET',
+      path: '/api/headers',
+      body: undefined,
+      query: {},
+      pathParams: {},
+      headerParams: { Authorization: like('Bearer sometokenhere') },
     },
   }
 
@@ -111,5 +143,6 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     responseInteraction,
     queryInteraction,
     pathParamsInteraction,
+    headerParamsInteraction,
   }
 }

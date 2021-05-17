@@ -3,8 +3,9 @@ import { MatcherResult, QueryObject, RequestOptions } from './interactionTypes'
 export interface InteractionContent<
   TBody,
   TRes,
-  TQuery extends QueryObject | undefined,
-  TParams extends QueryObject | undefined
+  TQuery extends QueryObject,
+  TParams extends QueryObject,
+  THeaders extends QueryObject
 > {
   given: {
     [index: string]: {
@@ -16,7 +17,7 @@ export interface InteractionContent<
     }
   }
   uponReceiving: string
-  withRequest: RequestOptions<TBody, TQuery, TParams>
+  withRequest: RequestOptions<TBody, TQuery, TParams, THeaders>
 }
 
 export function parseLikeObject(obj: any): any {

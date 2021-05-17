@@ -35,7 +35,7 @@ export const testInteractions = (
 const testAllInteractions = (
   provider: Pact,
   createInteractions: (like: <T>(v: T) => T) => {
-    [index: string]: InteractionContent<any, any, any, any>
+    [index: string]: InteractionContent<any, any, any, any, any>
   }
 ) => {
   // @ts-ignore
@@ -46,6 +46,7 @@ const testAllInteractions = (
         body: parseLikeObject(interaction.withRequest.body),
         query: parseLikeObject(interaction.withRequest.query),
         params: parseLikeObject(interaction.withRequest.pathParams),
+        headers: parseLikeObject(interaction.withRequest.headerParams),
       })
     )
   }
@@ -53,7 +54,7 @@ const testAllInteractions = (
 
 const testOneInteraction = (
   provider: Pact,
-  interaction: InteractionContent<any, any, any, any>,
+  interaction: InteractionContent<any, any, any, any, any>,
   call: () => Promise<Result<any>>
 ) => {
   describe(interaction.uponReceiving, () => {
@@ -75,20 +76,28 @@ const testOneInteraction = (
   })
 }
 
-const replaceParams = (withRequest: RequestOptions<any, any, any>) => {
-  if (!withRequest.pathParams) return withRequest
-  else {
+const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
+  const ret = { ...withRequest }
+  if (withRequest.pathParams) {
     let path = withRequest.path
     for (const key of Object.keys(withRequest.pathParams)) {
       if (!path.includes(`:${key}`))
         throw `:${key} not found in url '${withRequest.path}'`
       path = path.replace(`:${key}`, withRequest.pathParams[key])
     }
-    return { ...withRequest, path }
+    ret.path = path
   }
+  if (withRequest.headerParams) {
+    const headers = withRequest.headers || {}
+    for (const key of Object.keys(withRequest.headerParams)) {
+      headers[key] = parseLikeObject(withRequest.headerParams[key])
+    }
+    withRequest.headers = headers
+  }
+  return ret
 }
 export const createInteraction = (
-  content: InteractionContent<any, any, any, any>,
+  content: InteractionContent<any, any, any, any, any>,
   given: string
 ) =>
   new Interaction()
