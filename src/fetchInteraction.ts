@@ -22,7 +22,19 @@ export type FetchInteractionOptions<
   headers: THeaders
 }
 
-export async function fetchInteraction<
+export function createFetch<
+  TBody,
+  TRes,
+  TQuery extends QueryObject,
+  TParams extends QueryObject,
+  THeaders extends QueryObject
+>(interaction: InteractionContent<TBody, TRes, TQuery, TParams, THeaders>) {
+  return async (
+    options: FetchInteractionOptions<TBody, TQuery, TParams, THeaders>
+  ) => fetchInteraction(interaction, options)
+}
+
+async function fetchInteraction<
   TBody,
   TRes,
   TQuery extends QueryObject,

@@ -1,6 +1,6 @@
 import { Interaction, Pact } from '@pact-foundation/pact'
 import { InteractionContent, parseLikeObject } from './commonInteractions'
-import { fetchInteraction, Result } from './fetchInteraction'
+import { createFetch, Result } from './fetchInteraction'
 import { like } from '@pact-foundation/pact/src/dsl/matchers'
 import path from 'path'
 import axios from 'axios'
@@ -42,7 +42,7 @@ const testAllInteractions = (
   const interactions = createInteractions((v) => like(v))
   for (const interaction of Object.values(interactions)) {
     testOneInteraction(provider, interaction, () =>
-      fetchInteraction(interaction, {
+      createFetch(interaction)({
         body: parseLikeObject(interaction.withRequest.body),
         query: parseLikeObject(interaction.withRequest.query),
         params: parseLikeObject(interaction.withRequest.pathParams),
