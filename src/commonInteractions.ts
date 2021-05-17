@@ -13,7 +13,7 @@ export interface InteractionContent<
       headers?: {
         [name: string]: string | MatcherResult
       }
-      body: TRes
+      body: TRes | undefined
     }
   }
   uponReceiving: string

@@ -138,11 +138,46 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     },
   }
 
+  const successFailInteraction: InteractionContent<
+    { name: string },
+    { id: string },
+    {},
+    {},
+    {}
+  > = {
+    given: {
+      success: {
+        status: 200,
+        body: { id: like('something') },
+      },
+      fail: {
+        status: 401,
+        body: undefined,
+      },
+    },
+    uponReceiving: 'success or fail',
+    withRequest: {
+      method: 'PUT',
+      path: '/api/empty',
+      headers: {
+        Authorization: 'Bearer token',
+        'Content-Type': 'application/json',
+      },
+      body: {
+        name: like('NameHere'),
+      },
+      pathParams: {},
+      query: {},
+      headerParams: {},
+    },
+  }
+
   return {
     emptyInteraction,
     responseInteraction,
     queryInteraction,
     pathParamsInteraction,
     headerParamsInteraction,
+    successFailInteraction,
   }
 }
