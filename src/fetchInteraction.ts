@@ -65,14 +65,14 @@ async function fetchInteraction<
   let url = interaction.withRequest.path.toString()
 
   // Replace params in url
-  if (options.params) {
+  if (options.params && Object.keys(options.params).length > 0) {
     for (const key of Object.keys(options.params)) {
       url = url.replace(`:${key}`, options.params[key])
     }
   }
 
   // Insert query into url
-  if (options.query)
+  if (options.query && Object.keys(options.query).length > 0)
     url += `?${Object.keys(options.query)
       .map((key) => `${key}=${options?.query[key]}`)
       .join('&')}`
