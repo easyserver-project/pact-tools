@@ -51,7 +51,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
       method: 'GET',
       path: '/api/response',
       headers: {
-        Authorization: 'Bearer token',
+        Authorization: like('Bearer token'),
         'Content-Type': 'application/json',
       },
       body: undefined,
