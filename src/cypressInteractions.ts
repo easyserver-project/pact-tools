@@ -1,14 +1,18 @@
 import { parseLikeObject } from './commonInteractions'
 import { CreateInteractions, methods } from './interactionTypes'
 
+export interface Cy {
+  intercept(method: methods, url: string, response?: any): any
+}
+
 export const interceptInteraction = (
-  cy: { intercept(method: methods, url: string, response?: any): any },
+  cy: Cy,
   alias: string,
   given: string,
   createInteractions: CreateInteractions,
   host?: string
 ) => {
-  const interaction = (createInteractions(v => v) as any)[alias]
+  const interaction = (createInteractions((v) => v) as any)[alias]
   const method = interaction.withRequest.method
   const url = (host || '') + interaction.withRequest.path.toString()
   const body = interaction.given[given].body

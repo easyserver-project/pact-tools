@@ -16,13 +16,6 @@ export interface ResponseOptions {
   body?: any
 }
 
-export interface InteractionState {
-  providerState?: string
-  description?: string
-  request?: RequestOptions<any, any, any, any>
-  response?: ResponseOptions
-}
-
 export interface NewInteraction {
   given(providerState: string): this
 
@@ -40,7 +33,7 @@ export interface NewInteraction {
 
   willRespondWith(responseOpts: ResponseOptions): this
 
-  json(): InteractionState
+  json(): any
 }
 
 export interface InteractionContent<

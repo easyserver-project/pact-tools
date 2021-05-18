@@ -2,13 +2,7 @@ import { LikeFunc } from '../src/interactionTypes'
 import { InteractionContent } from '../src/commonInteractions'
 
 export const createInteractions = (like: LikeFunc = (v) => v) => {
-  const emptyInteraction: InteractionContent<
-    { name: string },
-    void,
-    {},
-    {},
-    {}
-  > = {
+  const emptyInteraction: InteractionContent<{ name: string }, void, {}, {}, {}> = {
     given: {
       undefined: {
         status: 200,
@@ -36,13 +30,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     },
   }
 
-  const responseInteraction: InteractionContent<
-    void,
-    { name: string },
-    {},
-    {},
-    {}
-  > = {
+  const responseInteraction: InteractionContent<void, { name: string }, {}, {}, {}> = {
     given: {
       success: {
         status: 200,
@@ -64,13 +52,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     },
   }
 
-  const queryInteraction: InteractionContent<
-    void,
-    { responseId: string },
-    { id: string },
-    {},
-    {}
-  > = {
+  const queryInteraction: InteractionContent<void, { responseId: string }, { id: string }, {}, {}> = {
     given: {
       success: {
         status: 200,
@@ -114,13 +96,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     },
   }
 
-  const headerParamsInteraction: InteractionContent<
-    void,
-    void,
-    {},
-    {},
-    { Authorization: string }
-  > = {
+  const headerParamsInteraction: InteractionContent<void, void, {}, {}, { Authorization: string }> = {
     given: {
       success: {
         status: 200,
@@ -138,13 +114,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     },
   }
 
-  const successFailInteraction: InteractionContent<
-    { name: string },
-    { id: string },
-    {},
-    {},
-    {}
-  > = {
+  const successFailInteraction: InteractionContent<{ name: string }, { id: string }, {}, {}, {}> = {
     given: {
       success: {
         status: 200,

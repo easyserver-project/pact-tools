@@ -1,43 +1,22 @@
-import { createInteraction, testInteractions } from '../src/pactInteractions'
 import { createInteractions } from './interactions'
-import { like } from '@pact-foundation/pact/src/dsl/matchers'
-import { createFetch } from '../src/fetchInteraction'
-import path from 'path'
-import { Interaction, Pact } from '@pact-foundation/pact'
-import { NewInteraction } from '../src/commonInteractions'
+import { createFetch } from '../src'
+import axios from 'axios'
 
-const pact = new Pact({
-  consumer: 'dummy',
-  provider: 'dummy',
-  port: 2244,
-  log: path.resolve(process.cwd(), 'logs', 'pact.log'),
-  dir: path.resolve(process.cwd(), 'pacts'),
-  logLevel: 'info',
-})
-
-describe('Pact', () => {
-  const provider = testInteractions(
-    pact,
-    createInteractions,
-    () => new Interaction() as NewInteraction,
-    like
-  )
-
+describe('Fetch', () => {
   test('manual', async () => {
-    // @ts-ignore
-    const interactions = createInteractions((v) => like(v))
-    await provider.addInteraction(
-      createInteraction(
-        interactions.emptyInteraction,
-        'undefined',
-        () => new Interaction() as NewInteraction
-      )
-    )
-    const result = await createFetch(interactions.emptyInteraction)({
+    jest.mock('axios')
+    axios.put = jest.fn().mockImplementation(() => new Promise<string>((resolve) => resolve('')))
+    const interaction = createInteractions().emptyInteraction
+    await createFetch(interaction)({
       body: { name: 'dsflijshlik' },
       query: {},
       headers: {},
       params: {},
     })
+    expect(axios.put).toHaveBeenCalledWith(
+      interaction.withRequest.path,
+      JSON.stringify({ name: 'dsflijshlik' }),
+      { headers: interaction.withRequest.headers }
+    )
   })
 })
