@@ -1,8 +1,4 @@
-import {
-  InteractionContent,
-  NewInteraction,
-  parseLikeObject,
-} from './commonInteractions'
+import { InteractionContent, NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
 import axios from 'axios'
 import { CreateInteractions, RequestOptions } from './interactionTypes'
@@ -68,14 +64,10 @@ const testOneInteraction = (
   describe(interaction.uponReceiving, () => {
     for (const given of Object.keys(interaction.given))
       test(given, async () => {
-        await provider.addInteraction(
-          createInteraction(interaction, given, newInteraction) as any
-        )
+        await provider.addInteraction(createInteraction(interaction, given, newInteraction) as any)
         const result = await call()
         if (result.err) {
-          expect((result.err as any).response.status).toEqual(
-            interaction.given[given].status
-          )
+          expect((result.err as any).response.status).toEqual(interaction.given[given].status)
           expect(result.data).toBeUndefined()
         } else {
           const expected = parseLikeObject(interaction.given[given].body)
@@ -91,9 +83,8 @@ const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
   if (withRequest.pathParams) {
     let path = withRequest.path
     for (const key of Object.keys(withRequest.pathParams)) {
-      if (!path.includes(`:${key}`))
-        throw `:${key} not found in url '${withRequest.path}'`
-      path = path.replace(`:${key}`, withRequest.pathParams[key])
+      if (!path.includes(`:${key}`)) throw `:${key} not found in url '${withRequest.path}'`
+      path = path.replace(`:${key}`, parseLikeObject(withRequest.pathParams[key]))
     }
     ret.path = path
   }

@@ -92,7 +92,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
       body: undefined,
       query: {},
       headerParams: {},
-      pathParams: { firstName: 'Person', lastName: 'Personsson' },
+      pathParams: { firstName: like('Person'), lastName: like('Personsson') },
     },
   }
 

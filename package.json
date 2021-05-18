@@ -1,7 +1,7 @@
 {
   "name": "@easyserver-project/pact-tools",
-  "version": "1.0.7",
-  "main": "index.js",
+  "version": "1.0.9",
+  "main": "build/src/index.js",
   "type": "module",
   "license": "MIT",
   "devDependencies": {
