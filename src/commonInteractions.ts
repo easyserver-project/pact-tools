@@ -1,4 +1,47 @@
-import { MatcherResult, QueryObject, RequestOptions } from './interactionTypes'
+import {
+  HTTPMethod,
+  MatcherResult,
+  methods,
+  QueryObject,
+  RequestOptions,
+} from './interactionTypes'
+
+export declare type Query = string | QueryObject
+
+export interface ResponseOptions {
+  status: number | MatcherResult
+  headers?: {
+    [name: string]: string | MatcherResult
+  }
+  body?: any
+}
+
+export interface InteractionState {
+  providerState?: string
+  description?: string
+  request?: RequestOptions<any, any, any, any>
+  response?: ResponseOptions
+}
+
+export interface NewInteraction {
+  given(providerState: string): this
+
+  uponReceiving(description: string): this
+
+  withRequest(requestOpts: {
+    method: HTTPMethod | methods
+    path: string | MatcherResult
+    query?: Query
+    headers?: {
+      [name: string]: string | MatcherResult
+    }
+    body?: any
+  }): this
+
+  willRespondWith(responseOpts: ResponseOptions): this
+
+  json(): InteractionState
+}
 
 export interface InteractionContent<
   TBody,

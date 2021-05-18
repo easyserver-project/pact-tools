@@ -1,25 +1,25 @@
-import { Interaction, Pact } from '@pact-foundation/pact'
-import { InteractionContent, parseLikeObject } from './commonInteractions'
+import {
+  InteractionContent,
+  NewInteraction,
+  parseLikeObject,
+} from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
-import { like } from '@pact-foundation/pact/src/dsl/matchers'
-import path from 'path'
 import axios from 'axios'
 import { CreateInteractions, RequestOptions } from './interactionTypes'
 
-export const testInteractions = (
-  consumer: string,
-  provider: string,
-  createInteractions: CreateInteractions
-) => {
-  const pact = new Pact({
-    consumer,
-    provider,
-    port: 2244,
-    log: path.resolve(process.cwd(), 'logs', 'pact.log'),
-    dir: path.resolve(process.cwd(), 'pacts'),
-    logLevel: 'info',
-  })
+type Pact = any
+type likeFunc = <T>(v: T) => {
+  contents: T
+  getValue: () => T
+  json_class: string
+}
 
+export const testInteractions = (
+  pact: any,
+  createInteractions: CreateInteractions,
+  newInteraction: () => NewInteraction,
+  like: likeFunc
+) => {
   beforeAll(async () => {
     axios.defaults.baseURL = 'http://localhost:2244'
     await pact.setup()
@@ -28,26 +28,33 @@ export const testInteractions = (
   afterEach(() => pact.verify())
   afterAll(() => pact.finalize())
 
-  testAllInteractions(pact, createInteractions)
+  // @ts-ignore
+  testAllInteractions(pact, createInteractions, newInteraction, like)
   return pact
 }
 
 const testAllInteractions = (
   provider: Pact,
-  createInteractions: (like: <T>(v: T) => T) => {
+  createInteractions: (like: likeFunc) => {
     [index: string]: InteractionContent<any, any, any, any, any>
-  }
+  },
+  newInteraction: () => NewInteraction,
+  like: likeFunc
 ) => {
   // @ts-ignore
   const interactions = createInteractions((v) => like(v))
   for (const interaction of Object.values(interactions)) {
-    testOneInteraction(provider, interaction, () =>
-      createFetch(interaction)({
-        body: parseLikeObject(interaction.withRequest.body),
-        query: parseLikeObject(interaction.withRequest.query),
-        params: parseLikeObject(interaction.withRequest.pathParams),
-        headers: parseLikeObject(interaction.withRequest.headerParams),
-      })
+    testOneInteraction(
+      provider,
+      interaction,
+      () =>
+        createFetch(interaction)({
+          body: parseLikeObject(interaction.withRequest.body),
+          query: parseLikeObject(interaction.withRequest.query),
+          params: parseLikeObject(interaction.withRequest.pathParams),
+          headers: parseLikeObject(interaction.withRequest.headerParams),
+        }),
+      newInteraction
     )
   }
 }
@@ -55,12 +62,15 @@ const testAllInteractions = (
 const testOneInteraction = (
   provider: Pact,
   interaction: InteractionContent<any, any, any, any, any>,
-  call: () => Promise<Result<any>>
+  call: () => Promise<Result<any>>,
+  newInteraction: () => NewInteraction
 ) => {
   describe(interaction.uponReceiving, () => {
     for (const given of Object.keys(interaction.given))
       test(given, async () => {
-        await provider.addInteraction(createInteraction(interaction, given))
+        await provider.addInteraction(
+          createInteraction(interaction, given, newInteraction) as any
+        )
         const result = await call()
         if (result.err) {
           expect((result.err as any).response.status).toEqual(
@@ -98,9 +108,10 @@ const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
 }
 export const createInteraction = (
   content: InteractionContent<any, any, any, any, any>,
-  given: string
+  given: string,
+  newInteraction: () => NewInteraction
 ) =>
-  new Interaction()
+  newInteraction()
     .given(given)
     .uponReceiving(content.uponReceiving)
     .withRequest(replaceParams(content.withRequest))
