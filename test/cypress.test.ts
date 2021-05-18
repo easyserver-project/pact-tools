@@ -10,8 +10,11 @@ describe('Cypress', () => {
     const cy: Cy = {
       intercept: interceptFn,
     }
-    interceptInteraction(cy, 'emptyInteraction', 'undefined', createInteractions)
-    expect(interceptFn).toHaveBeenCalled()
-    expect(asFn).toHaveBeenCalledWith("emptyInteraction")
+    interceptInteraction(cy, 'pathParamsInteraction', 'success', createInteractions)
+    expect(interceptFn).toHaveBeenCalledWith('GET', '/api/*/*', {
+      body: { responseId: 'something' },
+      statusCode: 200,
+    })
+    expect(asFn).toHaveBeenCalledWith('pathParamsInteraction')
   })
 })

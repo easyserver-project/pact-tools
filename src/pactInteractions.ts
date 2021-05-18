@@ -80,21 +80,17 @@ const testOneInteraction = (
 
 const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
   const ret = { ...withRequest }
-  if (withRequest.pathParams) {
-    let path = withRequest.path
-    for (const key of Object.keys(withRequest.pathParams)) {
-      if (!path.includes(`:${key}`)) throw `:${key} not found in url '${withRequest.path}'`
-      path = path.replace(`:${key}`, parseLikeObject(withRequest.pathParams[key]))
-    }
-    ret.path = path
+  let path = withRequest.path
+  for (const key of Object.keys(withRequest.pathParams)) {
+    if (!path.includes(`:${key}`)) throw `:${key} not found in url '${withRequest.path}'`
+    path = path.replace(`:${key}`, parseLikeObject(withRequest.pathParams[key]))
   }
-  if (withRequest.headerParams) {
-    const headers = withRequest.headers || {}
-    for (const key of Object.keys(withRequest.headerParams)) {
-      headers[key] = parseLikeObject(withRequest.headerParams[key])
-    }
-    withRequest.headers = headers
+  ret.path = path
+  const headers = withRequest.headers || {}
+  for (const key of Object.keys(withRequest.headerParams)) {
+    headers[key] = parseLikeObject(withRequest.headerParams[key])
   }
+  withRequest.headers = headers
   return ret
 }
 export const createInteraction = (
