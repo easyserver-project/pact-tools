@@ -2,6 +2,7 @@ import express from 'express'
 import { CreateInteractions } from './interactionTypes'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { parseLikeObject } from './commonInteractions'
+import { getTemplate } from './expressTemplate'
 
 export const createExpressInteractions = (createInteractions: CreateInteractions, target: string) => {
   const app = express()
@@ -19,11 +20,11 @@ export const createExpressInteractions = (createInteractions: CreateInteractions
     }))
     .sort((a, b) => b.path.length - a.path.length)
   app.get('/__interactions', (req, res) => {
-    const interactionOptions = Object.keys(interactions).reduce((acc, cur) => {
-      acc[cur] = Object.keys(interactions[cur].given)
-      return acc
-    }, {} as { [index: string]: string[] })
-    res.send(interactionOptions)
+    const interactionOptions = Object.keys(interactions).map((key) => ({
+      interaction: key,
+      given: Object.keys(interactions[key].given),
+    }))
+    res.send(getTemplate(interactionOptions, config))
   })
   app.post('/__interactions', (req, res) => {
     if (!interactions[req.body?.interaction]?.given[req.body?.given]) {

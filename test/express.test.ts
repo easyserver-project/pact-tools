@@ -13,7 +13,7 @@ describe('Express', function () {
   test('Get interactions', async () => {
     const server = createExpressInteractions(createInteractions, 'http://localhost:1234')
     const result = await axios.get('http://localhost:4000/__interactions')
-    expect(result.data['emptyInteraction']).toStrictEqual(['undefined', 'unauthorized'])
+    expect(result.data.startsWith('<html')).toBeTruthy()
     await server.close()
   })
 
