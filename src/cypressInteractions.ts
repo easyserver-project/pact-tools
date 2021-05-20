@@ -1,4 +1,4 @@
-import { parseLikeObject } from './commonInteractions'
+import { getUrl, InteractionContent, parseLikeObject } from './commonInteractions'
 import { CreateInteractions, methods } from './interactionTypes'
 
 export interface Cy {
@@ -14,12 +14,7 @@ export const interceptInteraction = (
 ) => {
   const interaction = (createInteractions((v) => v) as any)[alias]
   const method = interaction.withRequest.method
-  let url = (host || '') + interaction.withRequest.path.toString()
-  for (const key of Object.keys(interaction.withRequest.pathParams)) {
-    if (!interaction.withRequest.path.includes(`:${key}`))
-      throw `:${key} not found in url '${interaction.withRequest.path}'`
-    url = url.replace(`:${key}`, '*')
-  }
+  let url = getUrl(host, interaction)
   const body = interaction.given[given].body
   const statusCode = interaction.given[given].status
   cy.intercept(method, url, { body: parseLikeObject(body), statusCode }).as(alias)

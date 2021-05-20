@@ -70,3 +70,13 @@ export function parseLikeObject(obj: any): any {
     }, {} as any)
   else return value
 }
+
+export function getUrl(host: string | undefined, interaction: InteractionContent<any, any, any, any, any>) {
+  let url = (host || '') + interaction.withRequest.path.toString()
+  for (const key of Object.keys(interaction.withRequest.pathParams)) {
+    if (!interaction.withRequest.path.includes(`:${key}`))
+      throw `:${key} not found in url '${interaction.withRequest.path}'`
+    url = url.replace(`:${key}`, '*')
+  }
+  return url
+}

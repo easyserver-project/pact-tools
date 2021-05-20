@@ -11,7 +11,7 @@ describe('Cypress', () => {
       intercept: interceptFn,
     }
     interceptInteraction(cy, 'pathParamsInteraction', 'success', createInteractions)
-    expect(interceptFn).toHaveBeenCalledWith('GET', '/api/*/*', {
+    expect(interceptFn).toHaveBeenCalledWith('GET', '/api/name/*/*', {
       body: { responseId: 'something' },
       statusCode: 200,
     })

@@ -88,7 +88,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     uponReceiving: 'path params',
     withRequest: {
       method: 'GET',
-      path: '/api/:firstName/:lastName',
+      path: '/api/name/:firstName/:lastName',
       body: undefined,
       query: {},
       headerParams: {},
@@ -128,7 +128,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     uponReceiving: 'success or fail',
     withRequest: {
       method: 'PUT',
-      path: '/api/empty',
+      path: '/api/successfail',
       headers: {
         Authorization: 'Bearer token',
         'Content-Type': 'application/json',
