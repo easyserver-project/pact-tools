@@ -13,7 +13,12 @@ describe('Express', function () {
   test('Get interactions', async () => {
     const server = createExpressInteractions(createTestInteractions, 'http://localhost:1234')
     const result = await axios.get('http://localhost:4000/__interactions')
-    expect(result.data.pathParamsInteraction).toStrictEqual({ values: ['success'], selected: 0 })
+    expect(result.data.pathParamsInteraction).toStrictEqual({
+      values: ['success'],
+      selected: 0,
+      method: 'GET',
+      path: '/api/name/:firstName/:lastName',
+    })
     await server.close()
   })
 

@@ -74,7 +74,7 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
 
   const pathParamsInteraction: InteractionContent<
     void,
-    { responseId: string; more: { child: { leaf: string } } },
+    { responseId: string },
     {},
     { lastName: string; firstName: string },
     {}
@@ -82,7 +82,7 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
     given: {
       success: {
         status: 200,
-        body: { responseId: 'something', more: { child: { leaf: 'value' } } },
+        body: { responseId: 'something' },
       },
     },
     uponReceiving: 'path params',
