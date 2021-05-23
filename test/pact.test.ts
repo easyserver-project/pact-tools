@@ -1,5 +1,5 @@
 import { testInteractions } from '../src'
-import { createInteractions } from './interactions'
+import { createTestInteractions } from './testInteractions'
 import { like } from '@pact-foundation/pact/src/dsl/matchers'
 import path from 'path'
 import { Interaction, Pact } from '@pact-foundation/pact'
@@ -14,10 +14,5 @@ const pact = new Pact({
 })
 
 describe('Pact', () => {
-  testInteractions(
-    pact,
-    createInteractions,
-    () => new Interaction(),
-    like
-  )
+  testInteractions(pact, createTestInteractions, () => new Interaction(), like)
 })

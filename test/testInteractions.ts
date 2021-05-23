@@ -1,7 +1,7 @@
 import { LikeFunc } from '../src/interactionTypes'
 import { InteractionContent } from '../src/commonInteractions'
 
-export const createInteractions = (like: LikeFunc = (v) => v) => {
+export const createTestInteractions = (like: LikeFunc = (v) => v) => {
   const emptyInteraction: InteractionContent<{ name: string }, void, {}, {}, {}> = {
     given: {
       undefined: {
@@ -74,7 +74,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
 
   const pathParamsInteraction: InteractionContent<
     void,
-    { responseId: string },
+    { responseId: string; more: { child: { leaf: string } } },
     {},
     { lastName: string; firstName: string },
     {}
@@ -82,7 +82,7 @@ export const createInteractions = (like: LikeFunc = (v) => v) => {
     given: {
       success: {
         status: 200,
-        body: { responseId: 'something' },
+        body: { responseId: 'something', more: { child: { leaf: 'value' } } },
       },
     },
     uponReceiving: 'path params',

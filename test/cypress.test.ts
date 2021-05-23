@@ -1,5 +1,5 @@
 import { Cy, interceptInteraction } from '../src'
-import { createInteractions } from './interactions'
+import { createTestInteractions } from './testInteractions'
 
 describe('Cypress', () => {
   test('Intercept', async () => {
@@ -10,7 +10,7 @@ describe('Cypress', () => {
     const cy: Cy = {
       intercept: interceptFn,
     }
-    interceptInteraction(cy, 'pathParamsInteraction', 'success', createInteractions)
+    interceptInteraction(cy, 'pathParamsInteraction', 'success', createTestInteractions)
     expect(interceptFn).toHaveBeenCalledWith('GET', '/api/name/*/*', {
       body: { responseId: 'something' },
       statusCode: 200,
