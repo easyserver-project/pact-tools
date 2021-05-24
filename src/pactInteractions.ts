@@ -1,7 +1,6 @@
 import { InteractionContent, NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
 import { CreateInteractions, RequestOptions } from './interactionTypes'
-import fetch from 'node-fetch'
 
 type Pact = any
 type likeFunc = <T>(v: T) => {
@@ -19,6 +18,7 @@ export const testInteractions = (
   beforeAll(async () => {
     const baseURL = 'http://localhost:2244'
     if (!globalThis.fetch) {
+      const fetch = require('node-fetch')
       // @ts-ignore
       globalThis.fetch = (input, init) => fetch(baseURL + input, init)
     }

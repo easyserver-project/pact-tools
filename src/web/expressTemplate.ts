@@ -1,7 +1,6 @@
-import fetch from 'node-fetch'
-
 export const getWrapper = async () => {
-  let page = await fetch('http://localhost:4000/').then(async (d) => await d.text())
+  const fetch = require('node-fetch')
+  let page = await fetch('http://localhost:4000/').then(async (d: any) => await d.text())
   page = page.replace('</body>', getWrapperPanel())
   return page
 }
