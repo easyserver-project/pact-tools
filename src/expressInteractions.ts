@@ -2,7 +2,7 @@ import express, { Express } from 'express'
 import { CreateInteractions } from './interactionTypes'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { InteractionContent, parseLikeObject } from './commonInteractions'
-import { getTemplate } from './web/expressTemplate'
+import { getTemplate, getWrapper } from './web/expressTemplate'
 
 const handleMockedResponses = (
   app: Express,
@@ -79,6 +79,12 @@ function handleWeb(app: Express) {
   })
 }
 
+function handleWrapper(app: Express) {
+  app.get('/_', (req, res) => {
+    res.send(getWrapper())
+  })
+}
+
 export const createExpressInteractions = (createInteractions: CreateInteractions, target: string) => {
   const app = express()
   app.use(express.json())
@@ -89,6 +95,7 @@ export const createExpressInteractions = (createInteractions: CreateInteractions
   handleSetInteractions(app, config)
   handleMockedResponses(app, sortedInteractions, config)
   handleWeb(app)
+  handleWrapper(app)
 
   app.use('/', createProxyMiddleware({ target, changeOrigin: true }))
   return app.listen(4000)

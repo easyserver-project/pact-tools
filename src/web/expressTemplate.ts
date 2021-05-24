@@ -1,5 +1,72 @@
 const html = (strings: TemplateStringsArray) => strings.join(' ')
 
+export const getWrapper = () => html`
+  <html lang="en">
+    <head>
+      <title>Interaction control</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+      <script>
+        function toggle() {
+          const el = document.getElementById('wrapper')
+          el.className = el.className === 'wrapper-visible' ? 'wrapper-hidden' : 'wrapper-visible'
+          console.log('toggle')
+        }
+      </script>
+      <style>
+        body {
+          margin: 0;
+          overflow: hidden;
+        }
+
+        .root {
+          display: flex;
+          align-items: stretch;
+          width: 100vw;
+          height: 100vh;
+        }
+
+        .wrapper-visible {
+          width: 20vw;
+          height: 100%;
+        }
+
+        .wrapper-hidden {
+          visibility: hidden;
+          width: 0;
+          height: 100%;
+        }
+
+        .main {
+          width: 100%;
+          height: 100%;
+        }
+
+        .toggle-button {
+          position: fixed;
+          top: 0;
+          left: 0;
+          border: 1px solid darkgrey;
+          border-radius: 4px;
+          background-color: white;
+          color: black;
+          font-size: 16px;
+          cursor: pointer;
+          height: 10px;
+          width: 10px;
+        }
+      </style>
+    </head>
+    <body>
+      <button class="toggle-button" onclick="toggle()"></button>
+      <div class="root">
+        <iframe id="wrapper" class="wrapper-visible" src="/__" frameborder="0"></iframe>
+        <iframe class="main" src="/" frameborder="0"></iframe>
+      </div>
+    </body>
+  </html>
+`
+
 export const getTemplate = () => html` <html lang="en">
   <head>
     <title>Interaction control</title>
