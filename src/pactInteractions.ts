@@ -1,7 +1,7 @@
 import { InteractionContent, NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
-import axios from 'axios'
 import { CreateInteractions, RequestOptions } from './interactionTypes'
+import fetch from 'node-fetch'
 
 type Pact = any
 type likeFunc = <T>(v: T) => {
@@ -17,7 +17,11 @@ export const testInteractions = (
   like: likeFunc
 ) => {
   beforeAll(async () => {
-    axios.defaults.baseURL = 'http://localhost:2244'
+    const baseURL = 'http://localhost:2244'
+    if (!globalThis.fetch) {
+      // @ts-ignore
+      globalThis.fetch = (input, init) => fetch(baseURL + input, init)
+    }
     await pact.setup()
   })
   beforeEach(async () => pact.removeInteractions())

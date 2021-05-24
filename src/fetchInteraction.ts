@@ -1,5 +1,4 @@
 import { InteractionContent } from './commonInteractions'
-import axios from 'axios'
 import { QueryObject } from './interactionTypes'
 
 export interface Result<T> extends VoidResult {
@@ -8,6 +7,7 @@ export interface Result<T> extends VoidResult {
 
 export interface VoidResult {
   err?: Error
+  status: number
 }
 
 export type FetchInteractionOptions<
@@ -29,9 +29,8 @@ export function createFetch<
   TParams extends QueryObject,
   THeaders extends QueryObject
 >(interaction: InteractionContent<TBody, TRes, TQuery, TParams, THeaders>) {
-  return async (
-    options: FetchInteractionOptions<TBody, TQuery, TParams, THeaders>
-  ) => fetchInteraction(interaction, options)
+  return async (options: FetchInteractionOptions<TBody, TQuery, TParams, THeaders>) =>
+    fetchInteraction(interaction, options)
 }
 
 async function fetchInteraction<
@@ -45,17 +44,14 @@ async function fetchInteraction<
   options: FetchInteractionOptions<TBody, TQuery, TParams, THeaders>
 ): Promise<Result<TRes>> {
   let headers = interaction.withRequest.headers
-    ? (Object.keys(interaction.withRequest.headers!) || []).reduce(
-        (acc, cur) => {
-          // @ts-ignore
-          acc[cur] = interaction.withRequest.headers![cur].getValue
-            ? // @ts-ignore
-              interaction.withRequest.headers![cur].getValue()
-            : interaction.withRequest.headers![cur].toString()
-          return acc
-        },
-        {} as any
-      )
+    ? (Object.keys(interaction.withRequest.headers!) || []).reduce((acc, cur) => {
+        // @ts-ignore
+        acc[cur] = interaction.withRequest.headers![cur].getValue
+          ? // @ts-ignore
+            interaction.withRequest.headers![cur].getValue()
+          : interaction.withRequest.headers![cur].toString()
+        return acc
+      }, {} as any)
     : {}
   if (interaction.withRequest.headerParams) {
     for (const key of Object.keys(interaction.withRequest.headerParams)) {
@@ -79,24 +75,15 @@ async function fetchInteraction<
 
   const body = JSON.stringify(options.body)
   const method = interaction.withRequest.method
-  let call: Promise<any>
-  switch (method) {
-    case 'GET':
-      call = axios.get(url, { headers })
-      break
-    case 'POST':
-      call = axios.post(url, body, { headers })
-      break
-    case 'PUT':
-      call = axios.put(url, body, { headers })
-      break
-    default:
-      throw 'Not implemented'
-  }
-  return call
-    .then((d) => {
-      if (d.data === '') return {}
-      return { data: d.data as TRes }
+  return fetch(url, { headers, method, body })
+    .then(async (d) => {
+      let data: any = undefined
+      try {
+        data = await d.json()
+      } catch {}
+      return { data, status: d.status }
     })
-    .catch((e) => ({ err: e }))
+    .catch((err) => {
+      return { err, status: -1 }
+    })
 }
