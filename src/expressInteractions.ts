@@ -80,8 +80,8 @@ function handleWeb(app: Express) {
 }
 
 function handleWrapper(app: Express) {
-  app.get('/_', (req, res) => {
-    res.send(getWrapper())
+  app.get('/_', async (req, res) => {
+    res.send(await getWrapper())
   })
 }
 
