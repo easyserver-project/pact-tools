@@ -1,5 +1,4 @@
-import { LikeFunc } from '../src/interactionTypes'
-import { InteractionContent } from '../src/commonInteractions'
+import {InteractionContent, LikeFunc} from '../src/interactionTypes'
 
 export const createTestInteractions = (like: LikeFunc = (v) => v) => {
   const emptyInteraction: InteractionContent<{ name: string }, void, {}, {}, {}> = {

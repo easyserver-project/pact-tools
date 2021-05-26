@@ -1,7 +1,7 @@
 import express, { Express } from 'express'
-import { CreateInteractions } from './interactionTypes'
+import {CreateInteractions, InteractionContent} from './interactionTypes'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import { InteractionContent, parseLikeObject } from './commonInteractions'
+import { parseLikeObject } from './commonInteractions'
 import { getTemplate, getWrapper } from './web/expressTemplate'
 
 const handleMockedResponses = (
