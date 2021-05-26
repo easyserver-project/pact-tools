@@ -1,6 +1,6 @@
-import { InteractionContent, NewInteraction, parseLikeObject } from './commonInteractions'
+import { NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
-import { CreateInteractions, RequestOptions } from './interactionTypes'
+import {CreateInteractions, InteractionContent, RequestOptions} from './interactionTypes'
 
 type Pact = any
 type likeFunc = <T>(v: T) => {

@@ -1,5 +1,3 @@
-import { InteractionContent } from './commonInteractions'
-
 export declare type methods =
   | 'GET'
   | 'POST'
@@ -66,4 +64,39 @@ export declare type Query = QueryObject
 export type LikeFunc = <T>(v: T) => T
 export type CreateInteractions = (like: LikeFunc) => {
   [index: string]: InteractionContent<any, any, any, any, any>
+}
+
+export interface InteractionContent<
+    TBody,
+    TRes,
+    TQuery extends QueryObject,
+    TParams extends QueryObject,
+    THeaders extends QueryObject
+    > {
+  given: {
+    [index: string]: {
+      status: number | MatcherResult
+      headers?: {
+        [name: string]: string | MatcherResult
+      }
+      body: TRes | undefined
+    }
+  }
+  uponReceiving: string
+  withRequest: RequestOptions<TBody, TQuery, TParams, THeaders>
+}
+
+export interface GetInteraction<T> extends InteractionContent<void, T, {}, {}, { Authorization: string }> {
+}
+
+export interface GetQueryInteraction<T, Q extends QueryObject> extends InteractionContent<void, T, Q, {}, { Authorization: string }> {
+}
+
+export interface GetParamsInteraction<T, P extends QueryObject> extends InteractionContent<void, T, {}, P, { Authorization: string }> {
+}
+
+export interface PostInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }> {
+}
+
+export interface PostParamsInteraction<T, P extends QueryObject> extends InteractionContent<T, void, {}, P, { Authorization: string }> {
 }

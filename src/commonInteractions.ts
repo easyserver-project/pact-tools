@@ -1,5 +1,5 @@
 import {
-  HTTPMethod,
+  HTTPMethod, InteractionContent,
   MatcherResult,
   methods,
   QueryObject,
@@ -36,25 +36,7 @@ export interface NewInteraction {
   json(): any
 }
 
-export interface InteractionContent<
-  TBody,
-  TRes,
-  TQuery extends QueryObject,
-  TParams extends QueryObject,
-  THeaders extends QueryObject
-> {
-  given: {
-    [index: string]: {
-      status: number | MatcherResult
-      headers?: {
-        [name: string]: string | MatcherResult
-      }
-      body: TRes | undefined
-    }
-  }
-  uponReceiving: string
-  withRequest: RequestOptions<TBody, TQuery, TParams, THeaders>
-}
+
 
 export function parseLikeObject(obj: any): any {
   if (!obj) return undefined

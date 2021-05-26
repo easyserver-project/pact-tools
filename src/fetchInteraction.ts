@@ -1,5 +1,4 @@
-import { InteractionContent } from './commonInteractions'
-import { QueryObject } from './interactionTypes'
+import {InteractionContent, QueryObject} from './interactionTypes'
 
 export interface Result<T> extends VoidResult {
   data?: T

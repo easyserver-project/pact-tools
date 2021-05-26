@@ -1,4 +1,4 @@
-import { getUrl, InteractionContent, parseLikeObject } from './commonInteractions'
+import { getUrl, parseLikeObject } from './commonInteractions'
 import { CreateInteractions, methods } from './interactionTypes'
 
 export interface Cy {
