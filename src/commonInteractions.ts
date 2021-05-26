@@ -1,10 +1,4 @@
-import {
-  HTTPMethod, InteractionContent,
-  MatcherResult,
-  methods,
-  QueryObject,
-  RequestOptions,
-} from './interactionTypes'
+import { HTTPMethod, InteractionContent, MatcherResult, methods, QueryObject, RequestOptions } from './interactionTypes'
 
 export declare type Query = string | QueryObject
 
@@ -36,18 +30,14 @@ export interface NewInteraction {
   json(): any
 }
 
-
-
 export function parseLikeObject(obj: any): any {
   if (!obj) return undefined
   const value = obj.hasOwnProperty('getValue') ? obj.getValue() : obj
-  if (Array.isArray(value))
-    return value.map((d) => (typeof d === 'object' ? parseLikeObject(d) : d))
+  if (Array.isArray(value)) return value.map((d) => (typeof d === 'object' ? parseLikeObject(d) : d))
   if (typeof value === 'object')
     return Object.keys(value).reduce((acc, cur) => {
       const propValue = value[cur]
-      acc[cur] =
-        typeof propValue === 'object' ? parseLikeObject(propValue) : propValue
+      acc[cur] = typeof propValue === 'object' ? parseLikeObject(propValue) : propValue
       return acc
     }, {} as any)
   else return value
@@ -60,5 +50,6 @@ export function getUrl(host: string | undefined, interaction: InteractionContent
       throw `:${key} not found in url '${interaction.withRequest.path}'`
     url = url.replace(`:${key}`, '*')
   }
+  if (Object.keys(interaction.withRequest.query).length > 0 && !url.endsWith('*')) url += '*'
   return url
 }

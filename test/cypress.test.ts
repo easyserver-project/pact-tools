@@ -2,7 +2,7 @@ import { Cy, interceptInteraction } from '../src'
 import { createTestInteractions } from './testInteractions'
 
 describe('Cypress', () => {
-  test('Intercept', async () => {
+  test('Intercept path params', async () => {
     const asFn = jest.fn()
     const interceptFn = jest.fn().mockImplementation(() => ({
       as: asFn,
@@ -16,5 +16,21 @@ describe('Cypress', () => {
       statusCode: 200,
     })
     expect(asFn).toHaveBeenCalledWith('pathParamsInteraction')
+  })
+
+  test('Intercept query', async () => {
+    const asFn = jest.fn()
+    const interceptFn = jest.fn().mockImplementation(() => ({
+      as: asFn,
+    }))
+    const cy: Cy = {
+      intercept: interceptFn,
+    }
+    interceptInteraction(cy, 'queryInteraction', 'success', createTestInteractions)
+    expect(interceptFn).toHaveBeenCalledWith('POST', '/api/query*', {
+      body: { responseId: 'something' },
+      statusCode: 200,
+    })
+    expect(asFn).toHaveBeenCalledWith('queryInteraction')
   })
 })
