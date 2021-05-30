@@ -10,12 +10,12 @@ export const interceptInteraction = (
   alias: string,
   given: string,
   createInteractions: CreateInteractions,
-  host?: string
+  options?: { host?: string; delay: number }
 ) => {
   const interaction = (createInteractions((v) => v) as any)[alias]
   const method = interaction.withRequest.method
-  let url = getUrl(host, interaction)
+  let url = getUrl(options?.host, interaction)
   const body = interaction.given[given].body
   const statusCode = interaction.given[given].status
-  cy.intercept(method, url, { body: parseLikeObject(body), statusCode }).as(alias)
+  cy.intercept(method, url, { body: parseLikeObject(body), statusCode, delay: options?.delay }).as(alias)
 }
