@@ -14,5 +14,5 @@ const pact = new Pact({
 })
 
 describe('Pact', () => {
-  testInteractions(pact, createTestInteractions, () => new Interaction(), like)
+  testInteractions(pact, createTestInteractions, () => new Interaction(), like, require('node-fetch'))
 })

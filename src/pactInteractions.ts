@@ -13,12 +13,13 @@ export const testInteractions = (
   pact: any,
   createInteractions: CreateInteractions,
   newInteraction: () => NewInteraction,
-  like: likeFunc
+  like: likeFunc,
+  fetch: any
 ) => {
   beforeAll(async () => {
     const baseURL = 'http://localhost:2244'
     if (!globalThis.fetch) {
-      const fetch = require('node-fetch')
+      // const fetch = require('node-fetch')
       // @ts-ignore
       globalThis.fetch = (input, init) => fetch(baseURL + input, init)
     }
