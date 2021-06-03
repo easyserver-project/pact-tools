@@ -29,6 +29,9 @@ const handleMockedResponses = (
       case 'PUT':
         app.put(interaction.path, func)
         break
+      case "DELETE":
+        app.delete(interaction.path, func)
+        break
       default:
         throw 'Not implemented yet!'
     }
