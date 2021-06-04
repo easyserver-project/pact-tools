@@ -97,7 +97,7 @@ const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
   for (const key of Object.keys(withRequest.headerParams)) {
     headers[key] = parseLikeObject(withRequest.headerParams[key])
   }
-  withRequest.headers = headers
+  ret.headers = headers
   return ret
 }
 export const createInteraction = (
