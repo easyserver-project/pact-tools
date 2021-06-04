@@ -1,6 +1,6 @@
 import { NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
-import {CreateInteractions, InteractionContent, RequestOptions} from './interactionTypes'
+import { CreateInteractions, InteractionContent, RequestOptions } from './interactionTypes'
 
 type Pact = any
 type likeFunc = <T>(v: T) => {
@@ -69,7 +69,9 @@ const testOneInteraction = (
   describe(interaction.uponReceiving, () => {
     for (const given of Object.keys(interaction.given))
       test(given, async () => {
-        await provider.addInteraction(createInteraction(interaction, given, newInteraction) as any)
+        await provider.addInteraction(
+          createInteraction(interaction, given, newInteraction, `${interaction.uponReceiving}_${given}`) as any
+        )
         const result = await call()
         if (result.err) {
           expect((result.err as any).response.status).toEqual(interaction.given[given].status)
@@ -101,10 +103,11 @@ const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
 export const createInteraction = (
   content: InteractionContent<any, any, any, any, any>,
   given: string,
-  newInteraction: () => NewInteraction
+  newInteraction: () => NewInteraction,
+  givenName: string
 ) =>
   newInteraction()
-    .given(given)
+    .given(givenName)
     .uponReceiving(content.uponReceiving)
     .withRequest(replaceParams(content.withRequest))
     .willRespondWith(content.given[given])
