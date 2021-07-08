@@ -17,7 +17,7 @@ export const testInteractions = (
   fetch: any
 ) => {
   beforeAll(async () => {
-    const baseURL = `http://localhost${pact.port}`
+    const baseURL = `http://localhost:${pact.opts.port}`
     if (!globalThis.fetch) {
       // const fetch = require('node-fetch')
       // @ts-ignore
