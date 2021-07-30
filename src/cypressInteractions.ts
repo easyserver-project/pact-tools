@@ -5,6 +5,18 @@ export interface Cy {
   intercept(method: methods, url: string, response?: any): any
 }
 
+export const prepareIntercepts = (
+  cy: Cy,
+  createInteractions: CreateInteractions,
+  options?: { host?: string; delay: number }) => {
+  const interactions = createInteractions((v) => v)
+  for (const key of Object.keys(interactions)) {
+    const interaction = interactions[key]
+    const firstGiven = Object.keys(interaction.given)[0]
+    interceptInteraction(cy, key, firstGiven, createInteractions, options)
+  }
+}
+
 export const interceptInteraction = (
   cy: Cy,
   alias: string,

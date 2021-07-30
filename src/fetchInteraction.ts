@@ -1,4 +1,4 @@
-import {InteractionContent, QueryObject} from './interactionTypes'
+import { InteractionContent, methods, QueryObject } from './interactionTypes'
 
 export interface Result<T> extends VoidResult {
   data?: T
@@ -9,48 +9,44 @@ export interface VoidResult {
   status: number
 }
 
-export type FetchInteractionOptions<
-  TBody,
+export type FetchInteractionOptions<TBody,
   TQuery extends QueryObject,
   TParams extends QueryObject,
-  THeaders extends QueryObject
-> = {
+  THeaders extends QueryObject> = {
   body: TBody
   query: TQuery
   params: TParams
   headers: THeaders
 }
 
-export function createFetch<
-  TBody,
+export function createFetch<TBody,
   TRes,
   TQuery extends QueryObject,
   TParams extends QueryObject,
-  THeaders extends QueryObject
->(interaction: InteractionContent<TBody, TRes, TQuery, TParams, THeaders>) {
+  THeaders extends QueryObject,
+  TMethod extends methods>(interaction: InteractionContent<TBody, TRes, TQuery, TParams, THeaders, TMethod>) {
   return async (options: FetchInteractionOptions<TBody, TQuery, TParams, THeaders>) =>
     fetchInteraction(interaction, options)
 }
 
-async function fetchInteraction<
-  TBody,
+async function fetchInteraction<TBody,
   TRes,
   TQuery extends QueryObject,
   TParams extends QueryObject,
-  THeaders extends QueryObject
->(
-  interaction: InteractionContent<TBody, TRes, TQuery, TParams, THeaders>,
+  THeaders extends QueryObject,
+  TMethod extends methods>(
+  interaction: InteractionContent<TBody, TRes, TQuery, TParams, THeaders, TMethod>,
   options: FetchInteractionOptions<TBody, TQuery, TParams, THeaders>
 ): Promise<Result<TRes>> {
   let headers = interaction.withRequest.headers
     ? (Object.keys(interaction.withRequest.headers!) || []).reduce((acc, cur) => {
-        // @ts-ignore
-        acc[cur] = interaction.withRequest.headers![cur].getValue
-          ? // @ts-ignore
-            interaction.withRequest.headers![cur].getValue()
-          : interaction.withRequest.headers![cur].toString()
-        return acc
-      }, {} as any)
+      // @ts-ignore
+      acc[cur] = interaction.withRequest.headers![cur].getValue
+        ? // @ts-ignore
+        interaction.withRequest.headers![cur].getValue()
+        : interaction.withRequest.headers![cur].toString()
+      return acc
+    }, {} as any)
     : {}
   if (interaction.withRequest.headerParams) {
     for (const key of Object.keys(interaction.withRequest.headerParams)) {
@@ -79,7 +75,8 @@ async function fetchInteraction<
       let data: any = undefined
       try {
         data = await d.json()
-      } catch {}
+      } catch {
+      }
       return { data, status: d.status }
     })
     .catch((err) => {

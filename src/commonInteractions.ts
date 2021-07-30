@@ -1,4 +1,4 @@
-import { HTTPMethod, InteractionContent, MatcherResult, methods, QueryObject, RequestOptions } from './interactionTypes'
+import { InteractionContent, MatcherResult, methods, QueryObject } from './interactionTypes'
 
 export declare type Query = string | QueryObject
 
@@ -16,7 +16,7 @@ export interface NewInteraction {
   uponReceiving(description: string): this
 
   withRequest(requestOpts: {
-    method: HTTPMethod | methods
+    method: methods
     path: string | MatcherResult
     query?: Query
     headers?: {
@@ -43,7 +43,7 @@ export function parseLikeObject(obj: any): any {
   else return value
 }
 
-export function getUrl(host: string | undefined, interaction: InteractionContent<any, any, any, any, any>) {
+export function getUrl(host: string | undefined, interaction: InteractionContent<any, any, any, any, any, methods>) {
   let url = (host || '') + interaction.withRequest.path.toString()
   for (const key of Object.keys(interaction.withRequest.pathParams)) {
     if (!interaction.withRequest.path.includes(`:${key}`))

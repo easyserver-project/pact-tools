@@ -1,6 +1,6 @@
 import { NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
-import { CreateInteractions, InteractionContent, RequestOptions } from './interactionTypes'
+import { CreateInteractions, InteractionContent, methods, RequestOptions } from './interactionTypes'
 
 type Pact = any
 type likeFunc = <T>(v: T) => {
@@ -37,7 +37,7 @@ export const testInteractions = (
 const testAllInteractions = (
   provider: Pact,
   createInteractions: (like: likeFunc) => {
-    [index: string]: InteractionContent<any, any, any, any, any>
+    [index: string]: InteractionContent<any, any, any, any, any, methods>
   },
   newInteraction: () => NewInteraction,
   like: likeFunc
@@ -62,7 +62,7 @@ const testAllInteractions = (
 
 const testOneInteraction = (
   provider: Pact,
-  interaction: InteractionContent<any, any, any, any, any>,
+  interaction: InteractionContent<any, any, any, any, any, methods>,
   call: () => Promise<Result<any>>,
   newInteraction: () => NewInteraction
 ) => {
@@ -85,7 +85,7 @@ const testOneInteraction = (
   })
 }
 
-const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
+const replaceParams = (withRequest: RequestOptions<any, any, any, any, methods>) => {
   const ret = { ...withRequest }
   let path = withRequest.path
   for (const key of Object.keys(withRequest.pathParams)) {
@@ -101,7 +101,7 @@ const replaceParams = (withRequest: RequestOptions<any, any, any, any>) => {
   return ret
 }
 export const createInteraction = (
-  content: InteractionContent<any, any, any, any, any>,
+  content: InteractionContent<any, any, any, any, any, methods>,
   given: string,
   newInteraction: () => NewInteraction,
   givenName: string

@@ -1,12 +1,12 @@
 import express, { Express } from 'express'
-import {CreateInteractions, InteractionContent} from './interactionTypes'
+import { CreateInteractions, InteractionContent, methods } from './interactionTypes'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { parseLikeObject } from './commonInteractions'
 import { getTemplate, getWrapper } from './web/expressTemplate'
 
 const handleMockedResponses = (
   app: Express,
-  interactions: { key: string; value: InteractionContent<any, any, any, any, any>; path: string }[],
+  interactions: { key: string; value: InteractionContent<any, any, any, any, any, methods>; path: string }[],
   config: { [p: string]: { selected: number; values: string[] } }
 ) => {
   for (const interaction of interactions) {
@@ -29,7 +29,7 @@ const handleMockedResponses = (
       case 'PUT':
         app.put(interaction.path, func)
         break
-      case "DELETE":
+      case 'DELETE':
         app.delete(interaction.path, func)
         break
       default:
@@ -38,23 +38,23 @@ const handleMockedResponses = (
   }
 }
 
-const sortInteractions = (interactions: { [p: string]: InteractionContent<any, any, any, any, any> }) =>
+const sortInteractions = (interactions: { [p: string]: InteractionContent<any, any, any, any, any, methods> }) =>
   Object.keys(interactions)
     .map((key) => ({
       key,
       value: interactions[key],
-      path: interactions[key].withRequest.path,
+      path: interactions[key].withRequest.path
     }))
     .sort((a, b) => b.path.length - a.path.length)
 
-const createDefaultConfig = (interactions: { [p: string]: InteractionContent<any, any, any, any, any> }) =>
+const createDefaultConfig = (interactions: { [p: string]: InteractionContent<any, any, any, any, any, methods> }) =>
   Object.keys(interactions).reduce((acc, cur) => {
     const interaction = interactions[cur]
     acc[cur] = {
       values: Object.keys(interaction.given),
       selected: 0,
       method: interaction.withRequest.method,
-      path: interaction.withRequest.path,
+      path: interaction.withRequest.path
     }
     return acc
   }, {} as { [index: string]: { selected: number; values: string[]; method: string; path: string } })

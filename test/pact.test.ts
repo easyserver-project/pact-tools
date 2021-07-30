@@ -8,7 +8,7 @@ import * as fs from 'fs'
 const pact = new Pact({
   consumer: 'dummy',
   provider: 'dummy',
-  port: 4500,
+  port: 4501,
   log: path.resolve(process.cwd(), 'logs', 'pact.log'),
   dir: path.resolve(process.cwd(), 'pacts'),
   logLevel: 'info',
