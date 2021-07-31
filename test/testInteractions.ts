@@ -143,7 +143,7 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
     uponReceiving: 'transitionInteraction',
     withRequest: {
       method: 'POST',
-      path: '/some/path',
+      path: '/api/transition',
       body: {
         content: like('valueHere')
       },
@@ -152,13 +152,13 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       pathParams: {},
       headerParams: { Authorization: like('token') }
     },
+    transitions: {
+      successFailInteraction: 'fail'
+    },
     given: {
       something: {
         status: 200,
         body: undefined
-        // transitions: {
-        //   getList: 'oneResult'
-        // }
       }
     }
   }

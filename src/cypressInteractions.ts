@@ -2,7 +2,9 @@ import { getUrl, parseLikeObject } from './commonInteractions'
 import { CreateInteractions, methods } from './interactionTypes'
 
 export interface Cy {
-  intercept(method: methods, url: string, response?: any): any
+  intercept(method: methods, url: string, response?: any): any,
+
+  wait(name: string): any
 }
 
 export const prepareIntercepts = (
@@ -29,18 +31,19 @@ export const interceptInteraction = (
   let url = getUrl(options?.host, interaction)
   const body = interaction.given[given].body
   const statusCode = interaction.given[given].status
-  if (interaction.given[given].transitions)
-    cy.intercept(method, url, (req: any) => {
-      req.reply({
-        body: parseLikeObject(body),
-        statusCode,
-        delay: options?.delay
-      })
-      for (const transition of Object.keys(interaction.given[given].transitions)) {
-        interceptInteraction(cy, transition, interaction.given[given].transitions[transition], createInteractions, options)
-      }
-    }).as(alias)
-  else
-    cy.intercept(method, url, { body: parseLikeObject(body), statusCode, delay: options?.delay }).as(alias)
+  cy.intercept(method, url, { body: parseLikeObject(body), statusCode, delay: options?.delay }).as(alias)
+}
 
+export const waitTransition = (
+  cy: Cy,
+  alias: string,
+  createInteractions: CreateInteractions) => {
+  cy.wait(`@${alias}`)
+  const interactions = createInteractions(v => v)
+  const transitions = interactions[alias].transitions
+  if (transitions) {
+    for (const key of Object.keys(transitions)) {
+      interceptInteraction(cy, key, transitions[key], createInteractions)
+    }
+  }
 }

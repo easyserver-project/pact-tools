@@ -1,6 +1,7 @@
 import { NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
 import { CreateInteractions, InteractionContent, methods, RequestOptions } from './interactionTypes'
+import {expect} from "@jest/globals"
 
 type Pact = any
 type likeFunc = <T>(v: T) => {

@@ -58,9 +58,9 @@ export interface InteractionContent<TBody,
         [name: string]: string | MatcherResult
       }
       body: TRes | undefined
-      transitions?: { [alias: string]: string }
     }
   }
+  transitions?: { [alias: string]: string }
   uponReceiving: string
   withRequest: RequestOptions<TBody, TQuery, TParams, THeaders, TMethod>
 }
@@ -74,10 +74,14 @@ export interface GetQueryInteraction<T, Q extends QueryObject> extends Interacti
 export interface GetParamsInteraction<T, P extends QueryObject> extends InteractionContent<void, T, {}, P, { Authorization: string }, 'GET'> {
 }
 
-export interface PostInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'POST'> {}
+export interface PostInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'POST'> {
+}
 
-export interface PostParamsInteraction<T, P extends QueryObject> extends InteractionContent<T, void, {}, P, { Authorization: string }, 'POST'> {}
+export interface PostParamsInteraction<T, P extends QueryObject> extends InteractionContent<T, void, {}, P, { Authorization: string }, 'POST'> {
+}
 
-export interface PutInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'PUT'> {}
+export interface PutInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'PUT'> {
+}
 
-export interface PutParamsInteraction<T, P extends QueryObject> extends InteractionContent<T, void, {}, P, { Authorization: string }, 'PUT'> {}
+export interface PutParamsInteraction<T, P extends QueryObject> extends InteractionContent<T, void, {}, P, { Authorization: string }, 'PUT'> {
+}
