@@ -29,5 +29,18 @@ export const interceptInteraction = (
   let url = getUrl(options?.host, interaction)
   const body = interaction.given[given].body
   const statusCode = interaction.given[given].status
-  cy.intercept(method, url, { body: parseLikeObject(body), statusCode, delay: options?.delay }).as(alias)
+  if (interaction.transitions)
+    cy.intercept(method, url, (req: any) => {
+      req.reply({
+        body: parseLikeObject(body),
+        statusCode,
+        delay: options?.delay
+      })
+      for (const transition of Object.keys(interaction.transitions)) {
+        interceptInteraction(cy, transition, interaction.transitions[transition], createInteractions, options)
+      }
+    }).as(alias)
+  else
+    cy.intercept(method, url, { body: parseLikeObject(body), statusCode, delay: options?.delay }).as(alias)
+
 }
