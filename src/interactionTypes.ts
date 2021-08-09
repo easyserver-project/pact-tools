@@ -15,11 +15,13 @@ export declare type methods =
   | 'UNLOCK'
   | 'REPORT'
 
-export type RequestOptions<TBody,
+export type RequestOptions<
+  TBody,
   TQuery extends QueryObject | undefined,
   TParams extends QueryObject | undefined,
   THeaders extends QueryObject | undefined,
-  TMethod extends methods> = {
+  TMethod extends methods
+> = {
   method: TMethod
   path: string
   pathParams: TParams
@@ -41,16 +43,19 @@ export interface QueryObject {
 }
 
 export type LikeFunc = <T>(v: T) => T
-export type CreateInteractions = (like: LikeFunc) => {
+export type CreateInteractions = (like: LikeFunc) => Interactions
+export type Interactions = {
   [index: string]: InteractionContent<any, any, any, any, any, methods>
 }
 
-export interface InteractionContent<TBody,
+export interface InteractionContent<
+  TBody,
   TRes,
   TQuery extends QueryObject,
   TParams extends QueryObject,
   THeaders extends QueryObject,
-  TMethod extends methods> {
+  TMethod extends methods
+> {
   given: {
     [index: string]: {
       status: number | MatcherResult
@@ -65,23 +70,20 @@ export interface InteractionContent<TBody,
   withRequest: RequestOptions<TBody, TQuery, TParams, THeaders, TMethod>
 }
 
-export interface GetInteraction<T> extends InteractionContent<void, T, {}, {}, { Authorization: string }, 'GET'> {
-}
+export interface GetInteraction<T> extends InteractionContent<void, T, {}, {}, { Authorization: string }, 'GET'> {}
 
-export interface GetQueryInteraction<T, Q extends QueryObject> extends InteractionContent<void, T, Q, {}, { Authorization: string }, 'GET'> {
-}
+export interface GetQueryInteraction<T, Q extends QueryObject>
+  extends InteractionContent<void, T, Q, {}, { Authorization: string }, 'GET'> {}
 
-export interface GetParamsInteraction<T, P extends QueryObject> extends InteractionContent<void, T, {}, P, { Authorization: string }, 'GET'> {
-}
+export interface GetParamsInteraction<T, P extends QueryObject>
+  extends InteractionContent<void, T, {}, P, { Authorization: string }, 'GET'> {}
 
-export interface PostInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'POST'> {
-}
+export interface PostInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'POST'> {}
 
-export interface PostParamsInteraction<T, P extends QueryObject> extends InteractionContent<T, void, {}, P, { Authorization: string }, 'POST'> {
-}
+export interface PostParamsInteraction<T, P extends QueryObject>
+  extends InteractionContent<T, void, {}, P, { Authorization: string }, 'POST'> {}
 
-export interface PutInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'PUT'> {
-}
+export interface PutInteraction<T> extends InteractionContent<T, void, {}, {}, { Authorization: string }, 'PUT'> {}
 
-export interface PutParamsInteraction<T, P extends QueryObject> extends InteractionContent<T, void, {}, P, { Authorization: string }, 'PUT'> {
-}
+export interface PutParamsInteraction<T, P extends QueryObject>
+  extends InteractionContent<T, void, {}, P, { Authorization: string }, 'PUT'> {}

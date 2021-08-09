@@ -1,6 +1,9 @@
-import { createTestInteractions } from './testInteractions'
+import { createTestInteractions, interactionsWithoutLikeFunc } from './testInteractions'
 import { createFetch } from '../src'
 import { parseLikeObject } from '../src/commonInteractions'
+import { string } from '@pact-foundation/pact/src/dsl/matchers'
+
+declare const expect: jest.Expect
 
 describe('Fetch', () => {
   test('manual', async () => {
@@ -16,6 +19,21 @@ describe('Fetch', () => {
     expect(global.fetch).toHaveBeenCalledWith(interaction.withRequest.path, {
       body: JSON.stringify(body),
       headers: parseLikeObject(interaction.withRequest.headers),
+      method: interaction.withRequest.method,
+    })
+  })
+
+  test('without like', async () => {
+    globalThis.fetch = jest.fn().mockImplementation(() => new Promise((resolve) => resolve({ json: () => ({}) })))
+    const interaction = interactionsWithoutLikeFunc.demoInteraction
+    await createFetch(interaction)({
+      body: undefined,
+      query: {},
+      headers: { Authorization: 'token' },
+      params: {},
+    })
+    expect(global.fetch).toHaveBeenCalledWith(interaction.withRequest.path, {
+      headers: interaction.withRequest.headerParams,
       method: interaction.withRequest.method,
     })
   })

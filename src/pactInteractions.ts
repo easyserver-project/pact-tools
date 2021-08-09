@@ -1,7 +1,9 @@
 import { NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
-import { CreateInteractions, InteractionContent, methods, RequestOptions } from './interactionTypes'
-import {expect} from "@jest/globals"
+import { CreateInteractions, InteractionContent, Interactions, methods, RequestOptions } from './interactionTypes'
+import { expect } from '@jest/globals'
+import { like } from '@pact-foundation/pact/src/dsl/matchers'
+import { Interaction } from '@pact-foundation/pact'
 
 type Pact = any
 type likeFunc = <T>(v: T) => {
@@ -9,13 +11,24 @@ type likeFunc = <T>(v: T) => {
   getValue: () => T
   json_class: string
 }
-
+export const testInteractionsSimple = (pact: Pact, interactions: Interactions, manualSetup: boolean = false) => {
+  testInteractions(
+    pact,
+    () => interactions,
+    () => new Interaction(),
+    // @ts-ignore
+    undefined,
+    require('node-fetch'),
+    manualSetup
+  )
+}
 export const testInteractions = (
-  pact: any,
+  pact: Pact,
   createInteractions: CreateInteractions,
   newInteraction: () => NewInteraction,
   like: likeFunc,
-  fetch: any
+  fetch: any,
+  manualSetup: boolean = false
 ) => {
   beforeAll(async () => {
     const baseURL = `http://localhost:${pact.opts.port}`
@@ -24,11 +37,13 @@ export const testInteractions = (
       // @ts-ignore
       globalThis.fetch = (input, init) => fetch(baseURL + input, init)
     }
-    await pact.setup()
+    if (!manualSetup) await pact.setup()
   })
-  beforeEach(async () => pact.removeInteractions())
-  afterEach(() => pact.verify())
-  afterAll(() => pact.finalize())
+  beforeEach(async () => await pact.removeInteractions())
+  afterEach(async () => await pact.verify())
+  afterAll(async () => {
+    if (!manualSetup) await pact.finalize()
+  })
 
   // @ts-ignore
   testAllInteractions(pact, createInteractions, newInteraction, like)

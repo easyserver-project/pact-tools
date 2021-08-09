@@ -1,6 +1,8 @@
 import { createExpressInteractions } from '../src/expressInteractions'
-import { createTestInteractions } from './testInteractions'
+import {createTestInteractions, interactionsWithoutLikeFunc} from './testInteractions'
 import axios from 'axios'
+
+declare const expect: jest.Expect
 
 describe('Express', function () {
   test('Get value', async () => {
@@ -42,6 +44,13 @@ describe('Express', function () {
     const text = result.data
     const startWith = text.trimStart().startsWith('<html')
     expect(startWith).toBeTruthy()
+    await server.close()
+  })
+
+  test('Without like func', async () => {
+    const server = createExpressInteractions(()=>interactionsWithoutLikeFunc, 'http://localhost:1234')
+    const result = await axios.get('http://localhost:4000/demo')
+    expect(result.data).toStrictEqual({ value: 'something' })
     await server.close()
   })
 })

@@ -1,16 +1,16 @@
-import { InteractionContent, LikeFunc, PostInteraction } from '../src/interactionTypes'
+import { GetInteraction, InteractionContent, Interactions, LikeFunc, PostInteraction } from '../src/interactionTypes'
 
 export const createTestInteractions = (like: LikeFunc = (v) => v) => {
   const emptyInteraction: InteractionContent<{ name: string }, void, {}, {}, {}, 'PUT'> = {
     given: {
       undefined: {
         status: 200,
-        body: undefined
+        body: undefined,
       },
       unauthorized: {
         status: 401,
-        body: undefined
-      }
+        body: undefined,
+      },
     },
     uponReceiving: 'empty',
     withRequest: {
@@ -18,23 +18,23 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       path: '/api/empty',
       headers: {
         Authorization: 'Bearer token',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: {
-        name: like('NameHere')
+        name: like('NameHere'),
       },
       pathParams: {},
       query: {},
-      headerParams: {}
-    }
+      headerParams: {},
+    },
   }
 
   const responseInteraction: InteractionContent<void, { name: string }, {}, {}, {}, 'GET'> = {
     given: {
       success: {
         status: 200,
-        body: { name: like('somename') }
-      }
+        body: { name: like('somename') },
+      },
     },
     uponReceiving: 'response',
     withRequest: {
@@ -42,21 +42,21 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       path: '/api/response',
       headers: {
         Authorization: like('Bearer token'),
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: undefined,
       pathParams: {},
       query: {},
-      headerParams: {}
-    }
+      headerParams: {},
+    },
   }
 
   const queryInteraction: InteractionContent<void, { responseId: string }, { id: string }, {}, {}, 'POST'> = {
     given: {
       success: {
         status: 200,
-        body: { responseId: 'something' }
-      }
+        body: { responseId: 'something' },
+      },
     },
     uponReceiving: 'query',
     withRequest: {
@@ -64,23 +64,26 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       path: '/api/query',
       pathParams: {},
       query: {
-        id: like('something')
+        id: like('something'),
       },
       body: undefined,
-      headerParams: {}
-    }
+      headerParams: {},
+    },
   }
 
-  const pathParamsInteraction: InteractionContent<void,
+  const pathParamsInteraction: InteractionContent<
+    void,
     { responseId: string },
     {},
     { lastName: string; firstName: string },
-    {}, 'GET'> = {
+    {},
+    'GET'
+  > = {
     given: {
       success: {
         status: 200,
-        body: { responseId: 'something' }
-      }
+        body: { responseId: 'something' },
+      },
     },
     uponReceiving: 'path params',
     withRequest: {
@@ -89,16 +92,16 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       body: undefined,
       query: {},
       headerParams: {},
-      pathParams: { firstName: like('Person'), lastName: like('Personsson') }
-    }
+      pathParams: { firstName: like('Person'), lastName: like('Personsson') },
+    },
   }
 
   const headerParamsInteraction: InteractionContent<void, void, {}, {}, { Authorization: string }, 'GET'> = {
     given: {
       success: {
         status: 200,
-        body: undefined
-      }
+        body: undefined,
+      },
     },
     uponReceiving: 'header params',
     withRequest: {
@@ -107,20 +110,20 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       body: undefined,
       query: {},
       pathParams: {},
-      headerParams: { Authorization: like('Bearer sometokenhere') }
-    }
+      headerParams: { Authorization: like('Bearer sometokenhere') },
+    },
   }
 
   const successFailInteraction: InteractionContent<{ name: string }, { id: string }, {}, {}, {}, 'PUT'> = {
     given: {
       success: {
         status: 200,
-        body: { id: like('something') }
+        body: { id: like('something') },
       },
       fail: {
         status: 401,
-        body: undefined
-      }
+        body: undefined,
+      },
     },
     uponReceiving: 'success or fail',
     withRequest: {
@@ -128,15 +131,15 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       path: '/api/successfail',
       headers: {
         Authorization: 'Bearer token',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: {
-        name: like('NameHere')
+        name: like('NameHere'),
       },
       pathParams: {},
       query: {},
-      headerParams: {}
-    }
+      headerParams: {},
+    },
   }
 
   const transitionInteraction: PostInteraction<{ content: string }> = {
@@ -145,22 +148,22 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
       method: 'POST',
       path: '/api/transition',
       body: {
-        content: like('valueHere')
+        content: like('valueHere'),
       },
       headers: { 'Content-Type': 'application/json' },
       query: {},
       pathParams: {},
-      headerParams: { Authorization: like('token') }
+      headerParams: { Authorization: like('token') },
     },
     transitions: {
-      successFailInteraction: 'fail'
+      successFailInteraction: 'fail',
     },
     given: {
       something: {
         status: 200,
-        body: undefined
-      }
-    }
+        body: undefined,
+      },
+    },
   }
 
   return {
@@ -170,6 +173,28 @@ export const createTestInteractions = (like: LikeFunc = (v) => v) => {
     pathParamsInteraction,
     headerParamsInteraction,
     successFailInteraction,
-    transitionInteraction
+    transitionInteraction,
   }
+}
+
+const demoInteraction: GetInteraction<{ value: string }> = {
+  given: {
+    success: {
+      status: 200,
+      body: { value: 'something' },
+    },
+  },
+  withRequest: {
+    method: 'GET',
+    path: '/demo',
+    query: {},
+    body: undefined,
+    headers: {},
+    pathParams: {},
+    headerParams: { Authorization: 'token' },
+  },
+  uponReceiving: 'Demo',
+}
+export const interactionsWithoutLikeFunc = {
+    demoInteraction
 }
