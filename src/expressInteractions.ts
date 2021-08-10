@@ -11,6 +11,13 @@ const handleMockedResponses = (
 ) => {
   for (const interaction of interactions) {
     const func = (req: express.Request, res: express.Response) => {
+      if (interaction.value.transitions) {
+        for (const transitionKey of Object.keys(interaction.value.transitions)) {
+          config[transitionKey].selected = config[transitionKey].values.indexOf(
+              interaction.value.transitions[transitionKey]
+          )
+        }
+      }
       const selectedIndex = config[interaction.key].selected
       const selectedKey = config[interaction.key].values[selectedIndex]
       const given = interaction.value.given[selectedKey]
@@ -43,7 +50,7 @@ const sortInteractions = (interactions: { [p: string]: InteractionContent<any, a
     .map((key) => ({
       key,
       value: interactions[key],
-      path: interactions[key].withRequest.path
+      path: interactions[key].withRequest.path,
     }))
     .sort((a, b) => b.path.length - a.path.length)
 
@@ -54,7 +61,7 @@ const createDefaultConfig = (interactions: { [p: string]: InteractionContent<any
       values: Object.keys(interaction.given),
       selected: 0,
       method: interaction.withRequest.method,
-      path: interaction.withRequest.path
+      path: interaction.withRequest.path,
     }
     return acc
   }, {} as { [index: string]: { selected: number; values: string[]; method: string; path: string } })

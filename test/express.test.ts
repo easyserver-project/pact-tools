@@ -1,5 +1,5 @@
 import { createExpressInteractions } from '../src/expressInteractions'
-import {createTestInteractions, interactionsWithoutLikeFunc} from './testInteractions'
+import { createTestInteractions, interactionsWithoutLikeFunc } from './testInteractions'
 import axios from 'axios'
 
 declare const expect: jest.Expect
@@ -48,9 +48,19 @@ describe('Express', function () {
   })
 
   test('Without like func', async () => {
-    const server = createExpressInteractions(()=>interactionsWithoutLikeFunc, 'http://localhost:1234')
+    const server = createExpressInteractions(() => interactionsWithoutLikeFunc, 'http://localhost:1234')
     const result = await axios.get('http://localhost:4000/demo')
     expect(result.data).toStrictEqual({ value: 'something' })
+    await server.close()
+  })
+
+  test('Transition', async () => {
+    const server = createExpressInteractions(createTestInteractions, 'http://localhost:1234')
+    let result = await axios.put('http://localhost:4000/api/successfail')
+    expect(result.status).toEqual(200)
+    await axios.post('http://localhost:4000/api/transition')
+    result = await axios.put('http://localhost:4000/api/successfail', null, { validateStatus: () => true })
+    expect(result.status).toEqual(401)
     await server.close()
   })
 })

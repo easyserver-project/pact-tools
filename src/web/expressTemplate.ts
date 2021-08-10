@@ -165,7 +165,7 @@ const getTemplateBody = () => html` <script
               body: JSON.stringify({ interaction, index }),
               headers: { 'Content-Type': 'application/json' },
             })
-            this.config[interaction].selected = index
+            await this.loadConfig()
           }
         },
         async test(interaction) {
@@ -179,6 +179,7 @@ const getTemplateBody = () => html` <script
             .catch((d) => {
               this.testData = undefined
             })
+          await this.loadConfig()
         },
       }
     }

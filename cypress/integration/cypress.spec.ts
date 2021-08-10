@@ -1,12 +1,14 @@
 /// <reference types="cypress" />
 
-import { prepareIntercepts, waitTransition } from '../../src/cypressInteractions'
-import { createTestInteractions } from '../../test/testInteractions'
+import { interceptInteractions } from '../../src/cypressInteractions'
+import { createTestInteractions, interactionsWithoutLikeFunc } from '../../test/testInteractions'
 
 describe('Transitions', () => {
-  it('Should transition to next state', () => {
-    prepareIntercepts(cy, createTestInteractions)
-    cy.intercept('GET', '/', `
+  beforeEach(() => {
+    cy.intercept(
+      'GET',
+      '/',
+      `
 <html lang='en'>
 <head><title>Demo</title></head>
 <script>
@@ -24,13 +26,32 @@ async function transition(){
 <button onclick='updateValue()'>Update</button>
 </body>
 
-</html>`)
+</html>`
+    )
+  })
+
+  it('Default Intercept', () => {
+    interceptInteractions(createTestInteractions())
     cy.visit('/')
     cy.get('button:contains(Update)').click()
-    cy.get("div:contains(200)").should("exist")
-    cy.get('button:contains(Transition)').click()
-    waitTransition(cy, 'transitionInteraction', createTestInteractions)
+    cy.get('div:contains(200)').should('exist')
+  })
+
+  it('Change response', () => {
+    const interactionSelector = interceptInteractions(createTestInteractions())
+    cy.visit('/')
+    interactionSelector['successFailInteraction'] = 'fail'
     cy.get('button:contains(Update)').click()
-    cy.get("div:contains(401)").should("exist")
+    cy.get('div:contains(401)').should('exist')
+  })
+
+  it.only('Transition', () => {
+    interceptInteractions(createTestInteractions())
+    cy.visit('/')
+    cy.get('button:contains(Update)').click()
+    cy.get('div:contains(200)').should('exist')
+    cy.get('button:contains(Transition)').click()
+    cy.get('button:contains(Update)').click()
+    cy.get('div:contains(401)').should('exist')
   })
 })
