@@ -28,7 +28,7 @@ export const interceptInteractions = (interactions: Interactions, options?: { ho
         body: interaction.given[selected[key]].body,
         headers: interaction.given[selected[key]].headers,
       })
-    })
+    }).as(key)
   }
   return selected
 }

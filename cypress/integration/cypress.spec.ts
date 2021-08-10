@@ -78,4 +78,11 @@ async function fetchWithPath(){
     cy.get('button:contains(Path)').click()
     cy.get('div:contains(200)').should('exist')
   })
+
+  it('Should be called', () => {
+    interceptInteractions(createTestInteractions())
+    cy.visit('/')
+    cy.get('button:contains(Update)').click()
+    cy.wait("@successFailInteraction")
+  })
 })
