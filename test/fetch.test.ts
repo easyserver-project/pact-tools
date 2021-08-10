@@ -1,7 +1,7 @@
 import { createTestInteractions, interactionsWithoutLikeFunc } from './testInteractions'
-import { createFetch } from '../src'
 import { parseLikeObject } from '../src/commonInteractions'
 import { string } from '@pact-foundation/pact/src/dsl/matchers'
+import {createFetch} from "../src/fetchInteraction";
 
 declare const expect: jest.Expect
 

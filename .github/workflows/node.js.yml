@@ -55,6 +55,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: yarn build
-      - run: npm publish
+      - run: |
+          cp package.json build/src
+          cd build/src
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

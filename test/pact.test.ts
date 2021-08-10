@@ -1,10 +1,9 @@
-import { InteractionContent, testInteractions } from '../src'
 import { createTestInteractions, interactionsWithoutLikeFunc } from './testInteractions'
 import { like } from '@pact-foundation/pact/src/dsl/matchers'
 import path from 'path'
 import { Interaction, Pact } from '@pact-foundation/pact'
 import * as fs from 'fs'
-import { testInteractionsSimple } from '../src/pactInteractions'
+import {testInteractions, testInteractionsSimple} from '../src/pactInteractions'
 import { Interactions } from '../src/interactionTypes'
 
 declare const expect: jest.Expect
