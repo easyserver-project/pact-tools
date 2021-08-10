@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-import { interceptInteractions } from '../../src/cypressInteractions'
-import { createTestInteractions, interactionsWithoutLikeFunc } from '../../test/testInteractions'
+import { interceptInteractions } from '../../src'
+import { createTestInteractions } from '../../test/testInteractions'
 
 describe('Transitions', () => {
   beforeEach(() => {

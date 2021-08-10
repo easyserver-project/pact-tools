@@ -1,4 +1,4 @@
-import { Cy, interceptInteraction } from './cypressInteractions'
+import { Cy, interceptInteractions } from './cypressInteractions'
 import { createFetch } from './fetchInteraction'
 import {
   InteractionContent,
@@ -12,7 +12,7 @@ import { testInteractions } from './pactInteractions'
 
 export {
   Cy,
-  interceptInteraction,
+  interceptInteractions,
   createFetch,
   testInteractions,
   InteractionContent,
