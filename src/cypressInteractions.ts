@@ -17,7 +17,7 @@ export const interceptInteractions = (interactions: Interactions, options?: { ho
     selected[key] = given[0]
     const method = interaction.withRequest.method
     let url = getUrl(options?.host, interaction)
-    cy.intercept(url, (req) => {
+    cy.intercept(method, url, (req) => {
       if (interaction.transitions) {
         for (const transitionKey of Object.keys(interaction.transitions)) {
           selected[transitionKey] = interaction.transitions[transitionKey]

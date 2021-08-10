@@ -19,11 +19,21 @@ async function updateValue(){
 async function transition(){
   await fetch("/api/transition",{method: "POST"})
 }
+async function fetchWithQuery(){
+  const result = await fetch("/api/query?id=someid",{method: "POST"})
+  document.getElementById("status").innerHTML=result.status.toString()
+}
+async function fetchWithPath(){
+  const result = await fetch("/api/name/Adam/Adamsson",{method: "GET"})
+  document.getElementById("status").innerHTML=result.status.toString()
+}
 </script>
 <body>
 <div id='status'></div>
 <button onclick='transition()'>Transition</button>
 <button onclick='updateValue()'>Update</button>
+<button onclick='fetchWithQuery()'>Query</button>
+<button onclick='fetchWithPath()'>Path</button>
 </body>
 
 </html>`
@@ -45,7 +55,7 @@ async function transition(){
     cy.get('div:contains(401)').should('exist')
   })
 
-  it.only('Transition', () => {
+  it('Transition', () => {
     interceptInteractions(createTestInteractions())
     cy.visit('/')
     cy.get('button:contains(Update)').click()
@@ -53,5 +63,19 @@ async function transition(){
     cy.get('button:contains(Transition)').click()
     cy.get('button:contains(Update)').click()
     cy.get('div:contains(401)').should('exist')
+  })
+
+  it('Query parameter', () => {
+    interceptInteractions(createTestInteractions())
+    cy.visit('/')
+    cy.get('button:contains(Query)').click()
+    cy.get('div:contains(200)').should('exist')
+  })
+
+  it('Path parameter', () => {
+    interceptInteractions(createTestInteractions())
+    cy.visit('/')
+    cy.get('button:contains(Path)').click()
+    cy.get('div:contains(200)').should('exist')
   })
 })
