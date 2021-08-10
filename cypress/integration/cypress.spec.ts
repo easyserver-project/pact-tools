@@ -13,6 +13,7 @@ describe('Transitions', () => {
 <head><title>Demo</title></head>
 <script>
 async function updateValue(){
+  document.getElementById("status").innerHTML="Loading"
   const result = await fetch("/api/successfail",{method: "PUT"})
   document.getElementById("status").innerHTML=result.status.toString()
 }
@@ -48,9 +49,9 @@ async function fetchWithPath(){
   })
 
   it('Change response', () => {
-    const interactionSelector = interceptInteractions(createTestInteractions())
+    const interactionsStore = interceptInteractions(createTestInteractions())
     cy.visit('/')
-    interactionSelector['successFailInteraction'] = 'fail'
+    interactionsStore.setGiven('successFailInteraction', 'fail')
     cy.get('button:contains(Update)').click()
     cy.get('div:contains(401)').should('exist')
   })
@@ -83,6 +84,15 @@ async function fetchWithPath(){
     interceptInteractions(createTestInteractions())
     cy.visit('/')
     cy.get('button:contains(Update)').click()
-    cy.wait("@successFailInteraction")
+    cy.wait('@successFailInteraction')
+  })
+
+  it('Delay', () => {
+    const store = interceptInteractions(createTestInteractions())
+    cy.visit('/')
+    store.setDelay("successFailInteraction",500)
+    cy.get('button:contains(Update)').click()
+    cy.get('div:contains(Loading)').should('exist')
+    cy.get('div:contains(200)').should('exist')
   })
 })
