@@ -38,7 +38,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: yarn test
-      - run: yarn cypress run
 
   publish:
     needs: [ test, version ]

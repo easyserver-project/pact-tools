@@ -28,8 +28,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "jest && cypress run",
     "start": "ts-node-dev test/server.ts",
-    "cypress": "cypress"
+    "cypress": "cypress open"
   }
 }

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { interceptInteractions } from '../../src'
+import { interceptInteractions } from '../../src/cypressInteractions'
 import { createTestInteractions } from '../../test/testInteractions'
 
 describe('Transitions', () => {

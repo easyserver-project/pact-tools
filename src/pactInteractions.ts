@@ -2,7 +2,6 @@ import { NewInteraction, parseLikeObject } from './commonInteractions'
 import { createFetch, Result } from './fetchInteraction'
 import { CreateInteractions, InteractionContent, Interactions, methods, RequestOptions } from './interactionTypes'
 import { expect } from '@jest/globals'
-import { like } from '@pact-foundation/pact/src/dsl/matchers'
 import { Interaction } from '@pact-foundation/pact'
 
 type Pact = any
